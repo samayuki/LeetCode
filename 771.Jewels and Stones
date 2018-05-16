@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int numJewelsInStones(string J, string S) {
+        int sizeJ = J.length();
+        int sizeS = S.length();
+        int sum = 0;
+        int i, j;
+        for (i = 0; i < sizeS; i++) {
+            for (j = 0; j < sizeJ; j++) {
+                if (S[i] == J[j]) {
+                    sum++;
+                    break;
+                }
+            }
+        }
+        return sum;
+    }
+};
