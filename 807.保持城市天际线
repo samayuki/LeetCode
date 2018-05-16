@@ -1,0 +1,30 @@
+#include <cmath>
+class Solution {
+public:
+    int maxIncreaseKeepingSkyline(vector<vector<int>>& grid) {
+        int size = grid.size();
+        vector<int> leftMax(size, 0);
+        vector<int> topMax(size, 0);
+        int sum = 0;
+        //先计算出两个方向的“天际线”
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (grid[i][j] > leftMax[i]) {
+                    leftMax[i] = grid[i][j];
+                }
+                if (grid[i][j] > topMax[j]) {
+                    topMax[j] = grid[i][j];
+                }
+            }
+        }
+        //每个点的最大高度是两个天际线值交叉取最小
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                int maxHeight = min(leftMax[i],topMax[j]);
+                sum += maxHeight - grid[i][j];
+                grid[i][j] = maxHeight;
+            }
+        }
+        return sum;
+    }
+};
