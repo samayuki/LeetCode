@@ -1,5 +1,5 @@
 这里使用了递归函数
-也可以不用递归，用队列来实现性能更好
+也可以不用递归，用队列or栈来代替递归来实现性能更好
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
