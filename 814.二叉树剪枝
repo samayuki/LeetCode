@@ -1,0 +1,35 @@
+使用递归
+也可使用占，队列
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* pruneTree(TreeNode* root) {
+        //以后序遍历的方法遍历二叉树 -> 左右中
+        backorder(root);
+        return root;
+    }
+    //返回当前节点所建立的子树中1的个数
+    int backorder(TreeNode* & root) {
+        int left = 0, right = 0;
+        if (root->left != NULL) {
+            left = backorder(root->left);
+        }
+        if (root->right != NULL) {
+            right = backorder(root->right);
+        }
+        int sum = left + right + root->val;
+        if (sum == 0) {
+            //delete root [];
+            root = NULL;
+        }
+        return sum;
+    }
+};
