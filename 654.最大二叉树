@@ -1,0 +1,45 @@
+这里使用了递归函数
+也可以不用递归，用队列来实现性能更好
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        TreeNode* root;
+        int left = 0, right = nums.size() - 1;
+        maximumTree(left, right, nums, root);
+        return root;
+    }
+    
+    void maximumTree(int left, int right, vector<int>& nums, TreeNode* & root) {
+        if (left < right) {
+            //找到根元素
+            int i = 0;
+            int maxmum = nums[left], index = left;
+            for (i = left; i <= right; i++) {
+                if (nums[i] > maxmum) {
+                    maxmum = nums[i];
+                    index = i;
+                }
+            }
+            root = new TreeNode(maxmum);
+            //分别对左右进行处理
+            if (left <= index - 1) {
+                maximumTree(left, index - 1, nums, root->left);
+            }
+            if (right >= index + 1) {
+                maximumTree(index + 1, right, nums, root->right);
+            }
+            
+        } else if (left == right) {
+            root = new TreeNode(nums[left]);
+        }
+    }
+};
