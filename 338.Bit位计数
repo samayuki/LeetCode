@@ -1,0 +1,43 @@
+要求O(n)的时间复杂度 -> 找规律
+例如0 ~ 31的二进制中1的个数如下（一维数组）：
+0 1 1 2
+1 2 2 3
+1 2 2 3
+2 3 3 4
+1 2 2 3
+2 3 3 4
+2 3 3 4
+3 4 4 5
+按这个n*4的矩阵找规律，可以发现：第i行第0列arr[i*4] = arr[i]，每一行的剩下3个数根据第一个数补齐
+arr[i*4] = arr[i];
+arr[i*4+1] = arr[i]+1;
+arr[i*4+2] = arr[i]+1;
+arr[i*4+3] = arr[i]+2;
+
+找到规律就可以解题了：
+
+class Solution {
+public:
+    vector<int> countBits(int num) {
+        vector<int> arr(num+1);
+        arr[0] = 0;
+        int i = 0;
+        int m = (int)(num / 4);
+        int n = num - m*4;
+        //
+        if (m > 0) {
+            for (i = 0; i < m; i++) {
+                arr[i*4] = arr[i];
+                arr[i*4+1] = arr[i]+1;
+                arr[i*4+2] = arr[i]+1;
+                arr[i*4+3] = arr[i]+2;
+            }
+        }
+        arr[m*4] = arr[m];
+        int temp[4] = {0,1,1,2};
+        for (i = 0; i <= n; i++) {
+            arr[m*4+i] = arr[m] + temp[i];
+        }
+        return arr;
+    }
+};
