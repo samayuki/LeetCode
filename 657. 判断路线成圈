@@ -1,0 +1,23 @@
+//只要R和L的个数相同，U和D的个数相同，就会回到原始位置
+
+class Solution {
+public:
+    bool judgeCircle(string moves) {
+        int size = moves.size();
+        int pos[2] = {0,0}; //位置，初始（0，0）
+        int i;
+        for (int i = 0; i < size; i++) {
+            switch(moves[i]) {
+                case 'R': pos[0]++; break;
+                case 'L': pos[0]--; break;
+                case 'U': pos[1]++; break;
+                case 'D': pos[1]--; break;
+            }
+        }
+        if (pos[0] == 0 && pos[1] == 0) {
+            return true;
+        }
+        return false;
+        
+    }
+};
