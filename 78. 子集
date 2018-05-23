@@ -1,0 +1,44 @@
+先将整数数组从小到大排序
+包含N个数的子集可以由包含N-1个数的子集产生
+
+#include <algorithm>
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> resultSet;
+        //一定存在的空子集：resultSet[0] = [];
+        resultSet.push_back(vector<int>(0));
+        int len = nums.size();
+        //nums为空的边界情况
+        if (len == 0) {
+            return resultSet;
+        }
+        //nums不为空，先从小到大排序
+        sort(nums.begin(), nums.end());
+        int i, j;
+        //单个元素的子集
+        for (i = 0; i < len; i++) {
+            resultSet.push_back(vector<int>(1,nums[i]));
+        }
+        //N个元素的子集是建立在N-1个元素的子集之上的，这里只允许加入一个比原来子集中所有元素都更大的数，不会产生重复子集
+        //resultSet[front]到resultSet[back]是N-1个元素的子集，用它们来生成N个元素的子集
+        int front = 1, back = len;
+        vector<int>::iterator iter;
+        while (front < back) {
+            for (i = front; i <= back; i++) {
+                vector<int> temp = resultSet[i];
+                iter = find(nums.begin(), nums.end(), temp[temp.size()-1]);
+                iter++;
+                while (iter != nums.end()) {
+                    temp.push_back(*iter);
+                    resultSet.push_back(temp);
+                    temp.pop_back();
+                    iter++;
+                }
+            }
+            front = back+1;
+            back = resultSet.size() - 1;
+        }
+        return resultSet;
+    }
+};
