@@ -1,0 +1,89 @@
+//使用动态规划求解
+想要找到最长的加号order=k
+则可以先去找可以满足order=k-1的中心，知道在哪些地方满足order=k-1后，在这些点的基础上看看它是否可以扩展为order=k
+//
+首先找满足order=1的中心点
+遍历这些中心点，找满足order=2的中心点
+直到order找不到更高的值
+
+#include <queue>
+class Solution {
+public:
+    struct Plus {
+        int center[2];    //+的中心点
+        int order;        //+的长度
+        Plus(int x, int y, int ord) {
+            center[0] = x;
+            center[1] = y;
+            order = ord;
+        }
+        Plus() {
+            order = 0;
+        }
+    };
+    int orderOfLargestPlusSign(int N, vector<vector<int>>& mines) {
+        vector<vector<int>> grid(N, vector<int>(N,0));
+        queue<Plus> oldQ, newQ;
+        int i, j;
+        //初始化grid和队列
+        int len = mines.size();
+        for (i = 0; i < len; i++) {
+            int x = mines[i][0];
+            int y = mines[i][1];
+            grid[x][y] = 1;
+        }
+        //根据给的条件将grid变为N*N的矩阵，值为0 or 1
+        //newQ中是满足order=1元素
+        for (i = 0; i < N; i++) {
+            for (j = 0; j < N; j++) {
+                if (grid[i][j] == 0) {
+                    Plus tempPlus(i, j, 1);
+                    newQ.push(tempPlus);
+                    grid[i][j] = 1;
+                } else {
+                    grid[i][j] = 0;
+                }
+            }
+        }
+        int finalOrder = 0;
+        while (!newQ.empty()) {
+            //newQ的内容转移到oldQ， newQ清空
+            swap(oldQ, newQ);
+            int len = oldQ.size();
+            finalOrder = oldQ.front().order;
+            //遍历oldQ
+            Plus tempPlus;
+            while (!oldQ.empty()) {
+                tempPlus = oldQ.front();
+                oldQ.pop();
+                //看它是否可以进一步扩展+号格式（order是否还能增加）
+                if (addOrderOrNot(tempPlus, N, grid)) {
+                    tempPlus.order++;
+                    newQ.push(tempPlus);    //newQ中存储的是比oldQ的order增1的情况
+                }
+            }
+        }
+        //
+        return finalOrder;
+    }
+    
+    bool addOrderOrNot(Plus & tempPlus, int & N, vector<vector<int>> & grid ) {
+        int x = tempPlus.center[0];
+        int y = tempPlus.center[1];
+        int order = tempPlus.order;
+        //先判断+1后四周是否会出界
+        int x1 = x - order;
+        int y1 = y - order;
+        int x2 = x + order;
+        int y2 = y + order;
+        if (x1 < 0 || y1 < 0 || x2 >= N || y2 >= N) {
+            return false;   //出界返回false
+        }
+        //不会出界，则判断这4个加上去的位置是否都是1
+        if (grid[x1][y] == 0 || grid[x2][y] == 0 || grid[x][y1] == 0 || grid[x][y2] == 0) {
+            return false;   //只要有1个位置为0，就不能order+1
+        }
+        //通过检测，可以order+1
+        return true;
+    }
+};
