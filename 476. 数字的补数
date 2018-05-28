@@ -1,0 +1,19 @@
+用位运算来处理更快一些
+
+class Solution {
+public:
+    int findComplement(int num) {
+        int result = 0;
+        int re;
+        int k = 0;  //现在处理的位数 2^k
+        //正整数，这里不考虑num = 0的情况
+        while (num != 0) {
+            re = 1 - num % 2;
+            num >>= 1;
+            re <<= k;
+            result += re;
+            k++;
+        }
+        return result;
+    }
+};
