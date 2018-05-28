@@ -1,65 +1,38 @@
-#1
+N皇后问题，回溯法解决
+
+#include <cmath>
 class Solution {
 public:
     int totalNQueens(int n) {
-        int result=0;
-        vector<int> x(n,0);
-        queen(n,0,x,result);
-        return result;
-    }
-    void queen(int n,int line,vector<int> &x,int &result)
-    {
-        int flag;
-        if(line==n)
-        {
-            result++;
-            return;
-        }
-        for(int i=0;i<n;i++)
-        {
-            flag = 1;
-            for(int j=0;j<line;j++)
-                if(x[j]==i||abs(x[j]-i)==abs(j-line))
-                {flag=0;break;}
-            if(flag)
-            {
-                x[line] = i;
-                queen(n,line+1,x,result);
+       int* queenArr = new int[n];  //用来存放每个皇后的列（0 ~ n-1）
+        int sum = 0;
+        queenArr[0] = -1;
+        int k = 0;                  //现在是第k个皇后
+        while (k >= 0) {
+            queenArr[k]++;  //从小到大尝试
+            while (queenArr[k] < n && !place(k, queenArr)) {    //找到又一个合适的位置
+                queenArr[k]++;
+            }
+            if (queenArr[k] < n) {  //不越界->这是一个合适的位置
+                if (k == n - 1) {   //成功完成一个解
+                    sum++;
+                } else {
+                    k++;    //下一个皇后
+                    queenArr[k] = -1;
+                }
+            } else {
+                k--;        //回溯
             }
         }
+        return sum;
     }
-};
-
-#2
-class Solution {
-public:
-    int queen[100];//存每行的皇后位置，由1到N  
-    int totalNQueens(int n) {
-        int count = 0;
-        int loc=1;  
-        while(loc>=1){  
-            queen[loc]++;  
-            if(queen[loc]==n+1)//回溯  
-                loc--;  
-            else if(check(loc)){  
-                if(loc==n){  
-                    count++;  
-                    loc--;  
-                }  
-                else{  
-                    loc++;  
-                    queen[loc]=0;  
-                }  
-            }  
-        }  
-        return count;  
+    //判断是否能满足条件
+    bool place(int k, int* queen) {
+        for (int i = 0; i < k; i++) {
+            if (abs(k - i) == abs(queen[k] - queen[i]) || queen[k] == queen[i]) {
+                return false;
+            }
+        }
+        return true;
     }
-    int check(int loc)//判断是否能满足条件  
-    {  
-        for(int i=1;i<loc;i++){  
-            if(queen[i]==queen[loc]||(int)fabs(queen[loc]-queen[i])==loc-i)  
-                return 0;  
-        }  
-        return 1;  
-    } 
 };
