@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        int* queenArr = new int[n];  //用来存放每个皇后的列
+        vector<vector<string>> solutions;
+        queenArr[0] = -1;
+        int k = 0;                  //现在是第k个皇后
+        while (k >= 0) {
+            queenArr[k]++;  //从小到大尝试
+            while (queenArr[k] < n && !place(k, queenArr)) {    //找到又一个合适的位置
+                queenArr[k]++;
+            }
+            if (queenArr[k] < n) {  //不越界->这是一个合适的位置
+                if (k == n - 1) {   //成功完成一个解,记录下来
+                    outputOneSolution(n, queenArr, solutions);
+                } else {
+                    k++;    //下一个皇后
+                    queenArr[k] = -1;
+                }
+            } else {
+                k--;        //回溯
+            }
+        }
+        return solutions;
+    }
+    
+    bool place(int k, int* queen) {
+        for (int i = 0; i < k; i++) {
+            if (abs(k - i) == abs(queen[k] - queen[i]) || queen[k] == queen[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    void outputOneSolution(int & n, int* queenArr, vector<vector<string>> & solutions) {
+        int k = solutions.size();
+        vector<string> sol(n, string(n, '.'));
+        for (int i = 0; i < n; i++) {
+            int col = queenArr[i];
+            sol[i][col] = 'Q';
+        }
+        solutions.push_back(sol);
+    }
+};
