@@ -1,0 +1,13 @@
+//不同位置，异或^
+class Solution {
+public:
+    int hammingDistance(int x, int y) {
+        int result = x ^ y;
+        int k = 0;
+        while (result) {
+            k += result % 2;
+            result /= 2;
+        }
+        return k;
+    }
+};
