@@ -1,0 +1,71 @@
+class Solution {
+public:
+    string intToRoman(int num) {
+        string result = "";
+        stack<int> myNum;
+        int temp;
+        int so = -1;    //位数-1
+        while (num != 0) {
+            temp = num % 10;
+            num = num / 10;
+            myNum.push(temp);
+            so++;
+        }
+        // 判断这个数字是在哪一位上，然后根据4、9、5分割情况
+        while (!myNum.empty()) {
+            temp = myNum.top();
+            if (so == 3) {
+                string addstr(temp, 'M');
+                result = result + addstr;
+            } else if (so == 2) {
+                if (temp == 4) {
+                    result = result + "CD";
+                } else if (temp == 9) {
+                    result = result + "CM";
+                } else if (temp == 5) {
+                    result = result + "D";
+                } else if (temp < 5) {
+                    string addstr(temp, 'C');
+                    result = result + addstr;
+                } else {
+                    temp = temp - 5;
+                    string addstr(temp, 'C');
+                    result = result + "D" + addstr;
+                }
+            } else if (so == 1) {
+                if (temp == 4) {
+                    result = result + "XL";
+                } else if (temp == 9) {
+                    result = result + "XC";
+                } else if (temp == 5) {
+                    result = result + "L";
+                } else if (temp < 5) {
+                    string addstr(temp, 'X');
+                    result = result + addstr;
+                } else {
+                    temp = temp - 5;
+                    string addstr(temp, 'X');
+                    result = result + "L" + addstr;
+                }
+            } else if (so == 0) {
+                if (temp == 4) {
+                    result = result + "IV";
+                } else if (temp == 9) {
+                    result = result + "IX";
+                } else if (temp == 5) {
+                    result = result + "V";
+                } else if (temp < 5) {
+                    string addstr(temp, 'I');
+                    result = result + addstr;
+                } else {
+                    temp = temp - 5;
+                    string addstr(temp, 'I');
+                    result = result + "V" + addstr;
+                }
+            }
+            myNum.pop();
+            so--;
+        }
+        return result;
+    }
+};
