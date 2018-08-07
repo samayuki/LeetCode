@@ -1,0 +1,67 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* mergeTrees(TreeNode* t1, TreeNode* t2) {
+        // 对根进行处理
+        TreeNode* newTree = NULL;
+        TreeNode* newRoot = NULL;
+        if (t1 || t2) {
+            newTree = new TreeNode(0);
+            if (t1 && t2) {
+                newTree->val = t1->val + t2->val;
+            } else if (t1) {
+                newTree->val = t1->val;
+            } else if (t2) {
+                newTree->val = t2->val;
+            }
+            newRoot = newTree;
+            myMergeTree(t1, t2, newTree);
+            return newRoot;
+        } else {
+            return newTree;
+        }
+    }
+    
+    void myMergeTree(TreeNode* t1, TreeNode* t2, TreeNode* newTree) {
+        if (t1 && t2) {
+            newTree->val = t1->val + t2->val;
+            if (t1->left || t2->left) {
+                newTree->left = new TreeNode(0);
+                myMergeTree(t1->left, t2->left, newTree->left);
+            }
+            if (t1->right || t2->right) {
+                newTree->right = new TreeNode(0);
+                myMergeTree(t1->right, t2->right, newTree->right);
+            }
+        } else if (t1) {
+            newTree->val = t1->val;
+            if (t1->left) {
+                newTree->left = new TreeNode(0);
+                myMergeTree(t1->left, NULL, newTree->left);
+            }
+            if (t1->right) {
+                newTree->right = new TreeNode(0);
+                myMergeTree(t1->right, NULL, newTree->right);
+            }
+        } else if (t2) {
+            newTree->val = t2->val;
+            if (t2->left) {
+                newTree->left = new TreeNode(0);
+                myMergeTree(NULL, t2->left, newTree->left);
+            }
+            if (t2->right) {
+                newTree->right = new TreeNode(0);
+                myMergeTree(NULL, t2->right,newTree->right);
+            }
+        }
+        
+    }
+};
